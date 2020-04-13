@@ -1,11 +1,11 @@
 import { GET_LEADS, DELETE_LEAD, ADD_LEAD } from '../actions/actionTypes'
 
-const initialStore = {
+const initialState = {
     leads: [] // List where we fetch leads data
 }
 
 // Creating reducer
-export default function (state = initialStore, action) {
+export default function (state = initialState, action) {
     switch(action.type) {
         case GET_LEADS:
             return {

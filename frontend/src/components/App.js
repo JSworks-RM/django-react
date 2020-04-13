@@ -1,37 +1,40 @@
 import React, { Component, Fragment } from "react"
 import ReactDOM from "react-dom"
 
+// Handler and Alert
+import { Provider as AlertProvider } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
+
 import Header from "./layout/Header"
 import Dashboard from "./leads/Dashboard"
-
-// Handler and Alert
-import { Provider as AlertProvider } from 'react-alert'
-import AlertTemplate from 'react-alert-template-basic'
+import Alerts from './layout/Alerts'
 
 import { Provider } from 'react-redux'
 import store from '../redux/store'
 
 // Alert Options
-const alertOption = {
+const alertOptions = {
   timeout: 3000,
-  position: 'top center'
-}
+  position: 'top center',
+};
 
 class App extends Component {
+
   render() {
     return (
-      <Provider store = {store}>
-        <AlertProvider template={AlertTemplate} {...alertOption}>
+      <Provider store={store}>
+        <AlertProvider template={AlertTemplate} {...alertOptions}>
           <Fragment>
             <Header />
+            <Alerts />
             <div className="container">
               <Dashboard />
             </div>
           </Fragment>
-        </AlertProvider>
+          </AlertProvider>
       </Provider>
-    )
+    );
   }
 }
 
-ReactDOM.render(<App />, document.getElementById("app"))
+ReactDOM.render(<App />, document.getElementById('app'));
