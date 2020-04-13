@@ -8,17 +8,20 @@ export class Alerts extends Component {
     
     static propTypes = {
         error: PropTypes.object.isRequired,
+        message: PropTypes.object.isRequired
     };
-
-    componentDidMount() {
-        this.props.alert.show('It Works')
-    }
  
     componentDidUpdate(prevProps) {
-      const { error, alert } = this.props;
+      const { error, alert, message } = this.props;
       if (error !== prevProps.error) {
-        if (error.msg.name) alert.error('Name is required')
-        if (error.msg.email) alert.error('Email is required')
+        if (error.msg.name) alert.error(`Name: ${error.msg.name.join()}`) // Use join to onvert the array as a string
+        if (error.msg.email) alert.error(`Email: ${error.msg.email.join()}`) // Use join to onvert the array as a string
+        if (error.msg.message) alert.error(`Message: ${error.msg.message.join()}`)
+      }
+
+      if (message !== prevProps.message) {
+        if (message.deleteLead) alert.success(message.deleteLead)
+        if (message.addLead) alert.success(message.addLead)
       }
     }
   
@@ -28,7 +31,8 @@ export class Alerts extends Component {
   }
   
   const mapStateToProps = (state) => ({
-    error: state.errorsReducer
+    error: state.errorsReducer,
+    message: state.messagesReducers
   });
   
   export default connect(mapStateToProps)(withAlert(Alerts));
