@@ -13,8 +13,16 @@ class LeadViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing LeadSerializer.
     """
-    queryset = Lead.objects.all() # Query that grab all the lead
     permission_classes = [
-        permissions.AllowAny
+        permissions.IsAuthenticated
     ]
+
     serializer_class = LeadSerializer
+
+    #queryset = Lead.objects.all() # Query that grab all the lead
+    def get_queryset(self):
+        return self.request.user.leads.all() # To get only leads of that user
+
+    # Save the lead owner when we create the lead
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
