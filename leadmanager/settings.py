@@ -27,8 +27,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'leads.apps.LeadsConfig', # Activate the new app
     'rest_framework',
-    'frontend.apps.FrontendConfig' # Activate the new app
+    'frontend.apps.FrontendConfig', # Activate the new app
+    'knox', # knox for token authentication 
+    'accounts',
 ]
+
+# Option for authentication classes
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': 
+    ('knox.auth.TokenAuthentication',) # THis is a tuple so do not forget to put a coma
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
