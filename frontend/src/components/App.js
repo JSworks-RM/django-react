@@ -12,6 +12,7 @@ import Alerts from './layout/Alerts'
 import Login from './accounts/Login'
 import Register from './accounts/Register'
 import PrivateRoute from './common/PrivateRoute'
+import { loadUser } from '../redux/actions/actionAuth'
 
 import { Provider } from 'react-redux'
 import store from '../redux/store'
@@ -23,6 +24,10 @@ const alertOptions = {
 };
 
 class App extends Component {
+
+  componentDidMount () {
+    store.dispatch(loadUser())
+  }
 
   render() {
     return (
