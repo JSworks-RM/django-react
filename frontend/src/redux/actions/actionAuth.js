@@ -6,7 +6,8 @@ import {
     USER_LOADED,
     AUTH_ERROR,
     LOGIN_SUCCESS,
-    LOGIN_FAIL
+    LOGIN_FAIL,
+    LOGOUT_SUCCESS
 } from './actionTypes'
 
 
@@ -84,5 +85,37 @@ const body = JSON.stringify({ username, password })
             dispatch ({
                 type: LOGIN_FAIL
             })
+        })
+}
+
+// ********************* LOGOT FUNTION *********************
+export const logout = () => (dispatch, getState) =>{
+
+    // GET TOKEN FROM STATE OF AUTH REDUCER
+    const token = getState().authReducer.token
+
+    // Header payload 
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    // If token, add to headers config
+    if (token) {
+        config.headers['Authorization'] = `token ${token}`
+    }
+
+    // Now we are ready to create our request to get or load the user
+    axios.post('/api/auth/logout/', null,  config)
+        .then(res => {
+            dispatch({
+                type: LOGOUT_SUCCESS
+            })
+        })
+        .catch(err => {
+            // Dispatch returnError just to put errors into the state. 
+            // we alse gonna call AUTH_ERROR to fire that action if we are not login to set defaults state 
+            dispatch (returnErrors(err.response.data, err.response.status))
         })
 }
