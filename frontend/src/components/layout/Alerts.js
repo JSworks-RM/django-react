@@ -14,9 +14,10 @@ export class Alerts extends Component {
     componentDidUpdate(prevProps) {
       const { error, alert, message } = this.props;
       if (error !== prevProps.error) {
-        if (error.msg.name) alert.error(`Name: ${error.msg.name.join()}`) // Use join to onvert the array as a string
-        if (error.msg.email) alert.error(`Email: ${error.msg.email.join()}`) // Use join to onvert the array as a string
+        if (error.msg.name) alert.error(`Name: ${error.msg.name.join()}`) // Use join to convert the array as a string
+        if (error.msg.email) alert.error(`Email: ${error.msg.email.join()}`) // Use join to convert the array as a string
         if (error.msg.message) alert.error(`Message: ${error.msg.message.join()}`)
+        if (error.msg.non_field_errors) alert.error(error.msg.non_field_errors.join(  ))
       }
 
       if (message !== prevProps.message) {
