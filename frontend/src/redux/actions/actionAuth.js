@@ -18,23 +18,8 @@ export const loadUser = () => (dispatch, getState) =>{
         type: USER_LOADING
     })
 
-    // GET TOKEN FROM STATE OF AUTH REDUCER
-    const token = getState().authReducer.token
-
-    // Header payload 
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
-
-    // If token, add to headers config
-    if (token) {
-        config.headers['Authorization'] = `token ${token}`
-    }
-
     // Now we are ready to create our request to get or load the user
-    axios.get('/api/auth/user', config)
+    axios.get('/api/auth/user', tokenConfig(getState))
         .then(res => {
             dispatch({
                 type: USER_LOADED,
@@ -91,6 +76,23 @@ const body = JSON.stringify({ username, password })
 // ********************* LOGOT FUNTION *********************
 export const logout = () => (dispatch, getState) =>{
 
+    // Now we are ready to create our request to get or load the user
+    axios.post('/api/auth/logout/', null,  tokenConfig(getState))
+        .then(res => {
+            dispatch({
+                type: LOGOUT_SUCCESS
+            })
+        })
+        .catch(err => {
+            // Dispatch returnError just to put errors into the state. 
+            // we alse gonna call AUTH_ERROR to fire that action if we are not login to set defaults state 
+            dispatch (returnErrors(err.response.data, err.response.status))
+        })
+}
+
+
+// 4. Setup config with token / Helper function
+export const tokenConfig = getState => {
     // GET TOKEN FROM STATE OF AUTH REDUCER
     const token = getState().authReducer.token
 
@@ -106,16 +108,5 @@ export const logout = () => (dispatch, getState) =>{
         config.headers['Authorization'] = `token ${token}`
     }
 
-    // Now we are ready to create our request to get or load the user
-    axios.post('/api/auth/logout/', null,  config)
-        .then(res => {
-            dispatch({
-                type: LOGOUT_SUCCESS
-            })
-        })
-        .catch(err => {
-            // Dispatch returnError just to put errors into the state. 
-            // we alse gonna call AUTH_ERROR to fire that action if we are not login to set defaults state 
-            dispatch (returnErrors(err.response.data, err.response.status))
-        })
+    return config
 }
