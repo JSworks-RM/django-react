@@ -21,20 +21,30 @@ class Register extends Component {
 
     onSubmit = e => {
         e.preventDefault()
-        const { password, password2 } = this.state
+        const { username, email, password, password2 } = this.state
         // Here we will want to call a register action inside of an auth 
         if (password !== password2) {
             this.props.createMessage({
                 passwordDoNotMatch: 'Passwords do not match'
             })
         } else {
-            console.log('Submite')
+            const newUser = {
+                username,
+                email,
+                password
+            }
+            if(password == password2) {
+                this.props.register(newUser)
+            }
         }
     }
 
     onChange = e => this.setState({ [e.target.name]: e.target.value })
 
     render () {
+        if (this.props.isAuthenticated) {
+            return <Redirect to='/'/>
+        }
         const { username, email, password, password2 } = this.state
         return (
             <div className="col-md-6 m-auto">
