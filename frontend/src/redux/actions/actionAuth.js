@@ -7,7 +7,9 @@ import {
     AUTH_ERROR,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
-    LOGOUT_SUCCESS
+    LOGOUT_SUCCESS,
+    REGISTER_SUCCESS,
+    REGISTER_FAIL
 } from './actionTypes'
 
 
@@ -73,7 +75,37 @@ const body = JSON.stringify({ username, password })
         })
 }
 
-// ********************* LOGOT FUNTION *********************
+// ********************* REGISTER FUNTION *********************
+// We need to get username and password in order to validate it againts the backend
+export const register = ({ username, password, email }) => (dispatch) =>{
+
+    // Header payload 
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    // Request body. Turn it out into a json 
+const body = JSON.stringify({ username, password, email })
+
+    // Post request to login
+    axios.post('/api/auth/register', body, config)
+        .then(res => {
+            dispatch({
+                type: REGISTER_SUCCESS,
+                payload: res.data
+            })
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+            dispatch ({
+                type: REGISTER_FAIL
+            })
+        })
+}
+
+// ********************* LOGOUT FUNTION *********************
 export const logout = () => (dispatch, getState) =>{
 
     // Now we are ready to create our request to get or load the user

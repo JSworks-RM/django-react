@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { createMessage } from '../../redux/actions/actionMessages'
+import { register } from '../../redux/actions/actionAuth'
 
 class Register extends Component {
+
     state = {
         username: "",
         email: "",
@@ -9,11 +14,22 @@ class Register extends Component {
         password2: ""
     }
 
+    static propTypes = {
+        isAuthenticated: PropTypes.bool,
+        register: PropTypes.func.isRequired
+    }
+
     onSubmit = e => {
         e.preventDefault()
-        // Here we will want to call a login action inside of an auth 
-        // in an auth.js file in the action folder
-        console.log('Submit')
+        const { password, password2 } = this.state
+        // Here we will want to call a register action inside of an auth 
+        if (password !== password2) {
+            this.props.createMessage({
+                passwordDoNotMatch: 'Passwords do not match'
+            })
+        } else {
+            console.log('Submite')
+        }
     }
 
     onChange = e => this.setState({ [e.target.name]: e.target.value })
@@ -80,4 +96,7 @@ class Register extends Component {
     }
 }
 
-export default Register
+const mapStateToProps = state => ({
+    isAuthenticated: state.authReducer.isAuthenticated
+})
+export default connect(mapStateToProps, {register, createMessage})(Register)
